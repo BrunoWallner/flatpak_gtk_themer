@@ -13,12 +13,18 @@ fn main() {
         println!("{}", theme);
     }
     print!("\n");
-    stdout().flush();
+    match stdout().flush() {
+        Ok(_) => (),
+        Err(_) => println!("failed to flush stdout")
+    };
 
-    let mut theme: String = String::new();
+    let theme: String;
     loop {
         print!("what theme do you want> ");
-        stdout().flush();
+        match stdout().flush() {
+            Ok(_) => (),
+            Err(_) => println!("failed to flush stdout")
+        };
 
         let input = input();
 
@@ -30,7 +36,10 @@ fn main() {
         }
     }
     print!("\n");
-    stdout().flush();
+    match stdout().flush() {
+        Ok(_) => (),
+        Err(_) => println!("failed to flush stdout")
+    };
 
     if is_root {
         println!("settings themes for every user...")
@@ -38,7 +47,10 @@ fn main() {
         println!("setting themes for current user only (try running as root)")
     }
     print!("\n");
-    stdout().flush();
+    match stdout().flush() {
+        Ok(_) => (),
+        Err(_) => println!("failed to flush stdout")
+    };
 
     let apps = get_application_names();
     for app in apps.iter() {

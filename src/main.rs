@@ -8,7 +8,7 @@ fn main() {
     let is_root = getuid().is_root();
 
     let themes = get_themes();
-    println!("[available themes via org.gtk.Gtk3theme]");
+    println!("[available themes]");
     for theme in themes.iter() {
         println!("{}", theme);
     }
@@ -122,7 +122,8 @@ fn get_themes() -> Vec<String> {
         let theme_name: String = String::from(theme.split("\t").collect::<Vec<&str>>()[1]);
 
         let name_part: Vec<&str> = theme_name.split(".").collect();
-        if name_part[0].to_owned() + name_part[1] + name_part[2] == "orggtkGtk3theme" {
+        let name_full = name_part[0].to_owned() + name_part[1] + name_part[2];
+        if name_full == "orggtkGtk3theme" || name_full == "orgkdeKStyle" {
             themes.push(String::from(name_part[3].trim()));
         }
     }

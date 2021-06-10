@@ -52,54 +52,20 @@ fn main() {
         Err(_) => println!("failed to flush stdout")
     };
 
-    let apps = get_application_names();
-    for app in apps.iter() {
-        let command =
-            Command::new("/usr/bin/flatpak")
-                .arg("override")
-                .arg(  if is_root {"--system"} else {"--user"} )
-                .arg("--env=GTK_THEME=".to_owned() + &theme)
-                .arg(app)
-                .output()
-                .expect("failed to execute /usr/bin/flatpak");
-
-        let error = String::from_utf8_lossy(&command.stderr);
-        if error.len() <= 0 {
-            println!("set theme for {}", app);
-        } else {
-            println!("an error occurred: {}", error);
-        }
-    }
-}
-
-fn get_application_names() -> Vec<String> {
-    let output =
+    let command =
         Command::new("/usr/bin/flatpak")
-            .arg("list")
-            .arg("--app")
+            .arg("override")
+            .arg(  if is_root {"--system"} else {"--user"} )
+            .arg("--env=GTK_THEME=".to_owned() + &theme)
             .output()
             .expect("failed to execute /usr/bin/flatpak");
 
-    let output = String::from_utf8_lossy(&output.stdout);
-
-    let mut raw_appdata: Vec<String> = Vec::new();
-    let mut full_apps_name: Vec<String> = Vec::new();
-
-    for app in output.trim().split("\n") {
-        raw_appdata.push(String::from(app));
+    let error = String::from_utf8_lossy(&command.stderr);
+    if error.len() <= 0 {
+        println!("successfully applied theme");
+    } else {
+        println!("an error occurred: {}", error);
     }
-
-    for app in raw_appdata.iter() {
-        let fullname: String = app
-            .split("\t")
-            .collect::<Vec<&str>>()[1]
-            .trim()
-            .to_string();
-
-        full_apps_name.push(fullname);
-    }
-
-    full_apps_name
 }
 
 fn get_themes() -> Vec<String> {

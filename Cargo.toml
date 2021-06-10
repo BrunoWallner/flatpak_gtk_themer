@@ -1,6 +1,6 @@
 [package]
 name = "flatpak_gtk_themer"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["luca"]
 edition = "2018"
 license = "GPL-3.0"
